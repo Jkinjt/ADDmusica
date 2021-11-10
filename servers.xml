@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<server id="1">
+    <dataBase>musica</dataBase>
+    <password></password>
+    <serverName>jdbc:mysql://localhost</serverName>
+    <userName>root</userName>
+</server>
