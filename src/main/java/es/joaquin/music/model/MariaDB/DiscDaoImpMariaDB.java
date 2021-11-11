@@ -7,7 +7,7 @@ import es.joaquin.music.model.DAO.DiscDAO;
 
 public class DiscDaoImpMariaDB extends Disc implements DiscDAO{
 	//Consultas a la base de datos
-		private static final String INSERT="";
+		private static final String INSERT="INSERT INTO disco( foto, reproducciones, fecha) VALUES (?,?,?,?)";
 		private static final String UPDATE="";
 		private static final String DELETE="";
 		private static final String SELECTALL="";

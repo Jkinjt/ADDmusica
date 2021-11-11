@@ -34,6 +34,25 @@ public class User {
 
 
 
+	public User(String name, String email, String picture) {
+		this.id=-1;
+		this.name = name;
+		this.email = email;
+		this.picture = picture;
+		this.songs=new ArrayList<Song>();
+		this.userList=new ArrayList<UserList>();
+	}
+
+	public User(int id,String name, String email, String picture) {
+		this.id=id;
+		this.name = name;
+		this.email = email;
+		this.picture = picture;
+		this.songs=new ArrayList<Song>();
+		this.userList=new ArrayList<UserList>();
+	}
+
+
 	public User(int id, String name, String email, String picture, List<UserList> userList, List<Song> songs) {
 		super();
 		this.id = id;

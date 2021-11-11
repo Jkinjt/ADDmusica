@@ -21,7 +21,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 	private static final String DELETE = "DELETE FROM artista WHERE id=?";
 	private static final String SELECTALL = "SELECT id,nombre,nacionalidad,foto FROM artista";
 	private static final String SELECTBYID = "SELECT `ID`, `nombre`, `nacionalidad`, `foto` FROM `artista` WHERE id=?";
-	private static final String SELECTBYNAME = "";
+	private static final String SELECTBYNAME = "SELECT `ID`, `nombre`, `nacionalidad`, `foto` FROM `artista` WHERE nombre LIKE?";
 	private static final String SELECTARTISTALBUM = "";
 	private static final String SELECTARTISTSONG = "";
 
@@ -60,7 +60,8 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 		super(name, nationality, picture);
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	
 	public boolean delete() {
 		boolean result=false;
 		con=MariaDBConexion.getConexion();
@@ -131,19 +132,17 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 	}
 
 	
-	//reparar
+	
 	public boolean update() {
 		boolean result=false;
 		
 		if(this.id==-1) {//si la id es -1 el artista no esta en la base de datos
-			System.out.println(this.id);
 			save();//por lo que se guarda
 		}else {
 			con=MariaDBConexion.getConexion();
 			if(con!=null) {
 				PreparedStatement ps=null;
 				try {
-					System.out.println(this.id);
 					ps=con.prepareStatement(UPDATE);
 					ps.setString(1, this.name);
 					ps.setString(2,this.nationality);
@@ -217,7 +216,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 				ps.setInt(1,id);
 				rs=ps.executeQuery();
 				if(rs.next()) {
-					result=new Artist(this.id=id,
+					result=new Artist(id,
 							rs.getString("nombre"),
 							rs.getString("nacionalidad"),
 							rs.getString("foto"));
@@ -239,10 +238,39 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 	}
 
 	public Artist getArtistByName(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Artist result=new Artist();
+		con = MariaDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps=null;
+			ResultSet rs=null;
+			try {
+				ps = con.prepareStatement(SELECTBYNAME);
+				ps.setString(1, name);
+				rs=ps.executeQuery();
+				if(rs.next()) {
+					result=new Artist(rs.getInt("ID"),
+							rs.getString("nombre"),
+							rs.getString("nacionalidad"),
+							rs.getString("foto"));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+					
+				}catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
 	}
 
+	
+	
 	public List<Disc> getArtitsDiscs() {
 		// TODO Auto-generated method stub
 		return null;

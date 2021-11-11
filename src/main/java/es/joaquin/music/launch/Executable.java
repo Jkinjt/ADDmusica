@@ -13,7 +13,7 @@ public class Executable {
 
 	public static void main(String[] args) {
 		
-		testGetAllArtist();
+		
 	}
 	static void testWrapperForXML() {
 		ServerConnection sc=new ServerConnection();
@@ -47,15 +47,22 @@ public class Executable {
 	}
 	static void testUpdateArtist() {
 		ArtistDaoImpMariaDB a=new ArtistDaoImpMariaDB("Jose Mari","espa�ol","./foto");
-		a.getArtistById(7);
+		a.getArtistById(8);
 		System.out.println(a.getId()+" "+a.getName());
 		a.setName("Leticia Sabater");
 		System.out.println(a.getName());
 		a.update();
+		a.getArtistById(8);
+		System.out.println(a.getId()+" "+a.getName());
 	}
 	static void testGetArtistById() {
 		ArtistDaoImpMariaDB a=new ArtistDaoImpMariaDB();
 		System.out.println(a.getArtistById(7));
+	}
+	
+	static void testGetArtistByName() {
+		ArtistDaoImpMariaDB a=new ArtistDaoImpMariaDB();
+		System.out.println(a.getArtistByName("Juanita"));
 	}
 
 }

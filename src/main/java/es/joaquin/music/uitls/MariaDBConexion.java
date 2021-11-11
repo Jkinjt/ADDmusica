@@ -27,7 +27,6 @@ public class MariaDBConexion {
 					e.printStackTrace();
 				}	
 				ServerConnection sc= WrapperForXML.loadFile();
-				System.out.println(sc.toString());
 				con=DriverManager.getConnection(sc.getServer()+"/"+sc.getDatabase(),sc.getUsername(),sc.getPassword());
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
