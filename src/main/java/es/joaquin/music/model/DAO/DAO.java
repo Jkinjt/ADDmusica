@@ -13,5 +13,7 @@ public interface DAO<t> {
 	boolean save();
 
 	boolean update();
+	
+	
 
 }

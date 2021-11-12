@@ -237,8 +237,8 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 		return result;
 	}
 
-	public Artist getArtistByName(String name) {
-		Artist result=new Artist();
+	public List<Artist> getArtistByName(String name) {
+		List<Artist> result=new ArrayList<>();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
 			PreparedStatement ps=null;
@@ -248,10 +248,10 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 				ps.setString(1, name);
 				rs=ps.executeQuery();
 				if(rs.next()) {
-					result=new Artist(rs.getInt("ID"),
+					result.add(new Artist(rs.getInt("ID"),
 							rs.getString("nombre"),
 							rs.getString("nacionalidad"),
-							rs.getString("foto"));
+							rs.getString("foto")));
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block

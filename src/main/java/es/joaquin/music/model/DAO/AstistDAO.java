@@ -15,7 +15,7 @@ public interface AstistDAO extends DAO {
 	
 	Artist getArtistById(int id);
 	
-	Artist getArtistByName(String name);
+	List<Artist> getArtistByName(String name);
 	
 	List<Disc> getArtitsDiscs();
 	

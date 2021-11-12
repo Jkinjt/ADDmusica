@@ -10,11 +10,9 @@ import es.joaquin.music.model.Song;
 public interface DiscDAO extends DAO {
 	
 	List<Disc> getAll();
-	
-	
-		
-	List<Song> getSongs();
-		
+	List<Disc> getDiscByName(String name);
+	Disc getDiscById(int id);		
+	List<Song> getSongs();		
 	Disc getDiscByArtist();
 	Disc getDiscbySong();
 	

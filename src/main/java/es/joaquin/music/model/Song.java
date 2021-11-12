@@ -12,6 +12,7 @@ public class Song {
 	protected int id;
 	protected String name;
 	protected int duration;
+	protected int nReprofuctions;
 	protected Disc disc;
 	protected String genre;
 	
@@ -22,14 +23,25 @@ public class Song {
 		this.id=-1;
 		this.name="";
 		this.duration=-1;
+		this.nReprofuctions=-1;
 		this.disc=new Disc();
 		this.genre="";
 	}
-	public Song(int id, String name, int duration, Disc disc, String genre) {
+	public Song(int id, String name, int duration,int nReprofuctions, Disc disc, String genre) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.duration = duration;
+		this.nReprofuctions=nReprofuctions;
+		this.disc = disc;
+		this.genre = genre;
+	}
+	public Song(String name, int duration,int nReprofuctions, Disc disc, String genre) {
+		super();
+		this.id = -1;
+		this.name = name;
+		this.duration = duration;
+		this.nReprofuctions=nReprofuctions;
 		this.disc = disc;
 		this.genre = genre;
 	}
@@ -38,6 +50,7 @@ public class Song {
 		this.id = song.id;
 		this.name = song.name;
 		this.duration = song.duration;
+		this.nReprofuctions=song.nReprofuctions;
 		this.disc = song.disc;
 		this.genre = song.genre;
 	}
@@ -75,7 +88,7 @@ public class Song {
 	}
 	@Override
 	public String toString() {
-		return "Song [id=" + id + ", name=" + name + ", duration=" + duration + ", disc=" + disc + ", genre=" + genre
+		return "Song [id=" + id + ", name=" + name + ", duration=" + duration + ", disc=" + disc.getName() + ", genre=" + genre
 				+ "]";
 	}
 	
