@@ -10,16 +10,16 @@ import es.joaquin.music.model.Song;
 
 public interface AstistDAO extends DAO {
 
-	List<Artist> getAll();
+	List<Artist> getAll() throws DAOException;
 	
 	
-	Artist getArtistById(int id);
+	Artist getArtistById(int id)throws DAOException;
 	
-	List<Artist> getArtistByName(String name);
+	List<Artist> getArtistByName(String name) throws DAOException;
 	
-	List<Disc> getArtitsDiscs();
+	List<Disc> getArtitsDiscs()throws DAOException;
 	
-	List<Song> getArtitsSongs();
+	List<Song> getArtitsSongs()throws DAOException;
 	
 	
 	

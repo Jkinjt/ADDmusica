@@ -9,12 +9,12 @@ import es.joaquin.music.model.Song;
 
 public interface DiscDAO extends DAO {
 	
-	List<Disc> getAll();
-	List<Disc> getDiscByName(String name);
-	Disc getDiscById(int id);		
-	List<Song> getSongs();		
-	Disc getDiscByArtist();
-	Disc getDiscbySong();
+	List<Disc> getAll() throws DAOException;
+	List<Disc> getDiscByName(String name)throws DAOException;
+	Disc getDiscById(int id)throws DAOException;		
+	List<Song> getSongs()throws DAOException;		
+	Disc getDiscByArtist()throws DAOException;
+	Disc getDiscbySong()throws DAOException;
 	
 	
 	

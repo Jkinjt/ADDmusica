@@ -6,13 +6,13 @@ import java.util.List;
 
 public interface DAO<t> {
 
-	List<t> getAll();
+	List<t> getAll() throws DAOException;
 
-	boolean delete();
+	boolean delete()throws DAOException;
 
-	boolean save();
+	boolean save()throws DAOException;
 
-	boolean update();
+	boolean update()throws DAOException;
 	
 	
 

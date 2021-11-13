@@ -12,6 +12,7 @@ import es.joaquin.music.model.Artist;
 import es.joaquin.music.model.Disc;
 import es.joaquin.music.model.Song;
 import es.joaquin.music.model.DAO.AstistDAO;
+import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.uitls.MariaDBConexion;
 
 public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
@@ -25,7 +26,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 	private static final String SELECTARTISTALBUM = "";
 	private static final String SELECTARTISTSONG = "";
 
-	// conexi�n
+	// conexión
 	private Connection con;
 	// boleano para saber si estan las caciones
 	boolean loadedSongs = false;
@@ -62,7 +63,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 	}
 	
 	
-	public boolean delete() {
+	public boolean delete() throws DAOException {
 		boolean result=false;
 		con=MariaDBConexion.getConexion();
 		if(con!=null) {
@@ -74,8 +75,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 				this.id=-1;
 				result=true;
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al borrar en la base de datos", e);
 			}finally {
 				try {
 					ps.close();
@@ -89,7 +89,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 		return result;
 	}
 
-	public boolean save() {
+	public boolean save() throws DAOException {
 		boolean result=false;
 		if(this.id!=-1) {//si la id es -1 el artista no esta en la base de datos
 			update();//por lo que se acutualiza
@@ -114,7 +114,8 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 					}
 					result=true;
 				} catch (SQLException e) {
-					e.printStackTrace();
+					//en caso de que no se consiga guardar en la base de datos
+					throw new DAOException("Fallo al guardar en la base de datos", e);
 				}finally {
 					try {
 						ps.close();
@@ -133,7 +134,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 
 	
 	
-	public boolean update() {
+	public boolean update() throws DAOException {
 		boolean result=false;
 		
 		if(this.id==-1) {//si la id es -1 el artista no esta en la base de datos
@@ -151,8 +152,8 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 					ps.executeUpdate();
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}finally {
+
+					throw new DAOException("Fallo al actualizar en la base de datos", e);}finally {
 					try {
 						ps.close();
 					} catch (SQLException e) {
@@ -169,7 +170,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 	}
 
 	
-	public List<Artist> getAll() {
+	public List<Artist> getAll() throws DAOException {
 		List<Artist> result = new ArrayList<Artist>();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
@@ -188,7 +189,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 					
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				throw new DAOException("Fallo al cargar en la base de datos", e);
 				//se ejecuta independiente mente
 			}finally {
 				try {
@@ -205,7 +206,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 		return result;
 	}
 
-	public Artist getArtistById(int id) {
+	public Artist getArtistById(int id) throws DAOException {
 		Artist result=new Artist();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
@@ -223,7 +224,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al cargar en la base de datos", e);
 			} finally {
 				try {
 					ps.close();
@@ -237,7 +238,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 		return result;
 	}
 
-	public List<Artist> getArtistByName(String name) {
+	public List<Artist> getArtistByName(String name) throws DAOException {
 		List<Artist> result=new ArrayList<>();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
@@ -254,8 +255,7 @@ public class ArtistDaoImpMariaDB extends Artist implements AstistDAO {
 							rs.getString("foto")));
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al cargar en la base de datos", e);
 			} finally {
 				try {
 					ps.close();

@@ -4,6 +4,7 @@ import java.util.List;
 
 import es.joaquin.music.model.Disc;
 import es.joaquin.music.model.Song;
+import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.MariaDB.DiscDaoImpMariaDB;
 import es.joaquin.music.model.MariaDB.SongDaoImpMariaDB;
 
@@ -32,15 +33,27 @@ public class SongTest {
 	static void testSaveSong() {
 		DiscDaoImpMariaDB d=new DiscDaoImpMariaDB();
 		
-		SongDaoImpMariaDB s=new SongDaoImpMariaDB("loka",2,2,d.getDiscById(2),"clasica");
-		s.save();
+		SongDaoImpMariaDB s;
+		try {
+			s = new SongDaoImpMariaDB("loka",2,2,d.getDiscById(2),"clasica");
+			s.save();
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	static void testUpadate() {
 		DiscDaoImpMariaDB d=new DiscDaoImpMariaDB();
-		SongDaoImpMariaDB s=new SongDaoImpMariaDB("loka",12,2,d.getDiscById(1),"clasica");
-		s.save();
-		s.setName("Jeronima");
-		s.update();
+		SongDaoImpMariaDB s;
+		try {
+			s = new SongDaoImpMariaDB("loka",12,2,d.getDiscById(1),"clasica");
+			s.save();
+			s.setName("Jeronima");
+			s.update();
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	static void testGetAll() {

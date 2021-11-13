@@ -14,6 +14,7 @@ import java.util.List;
 import es.joaquin.music.model.Artist;
 import es.joaquin.music.model.Disc;
 import es.joaquin.music.model.Song;
+import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.DAO.DiscDAO;
 import es.joaquin.music.uitls.MariaDBConexion;
 
@@ -63,7 +64,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public boolean delete() {
+	public boolean delete() throws DAOException {
 		boolean result = false;
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
@@ -75,8 +76,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 				this.id = -1;
 				result = true;
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al borrar en la base de datos", e);
 			} finally {
 				try {
 					ps.close();
@@ -90,7 +90,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 		return result;
 	}
 
-	public boolean save() {
+	public boolean save() throws DAOException {
 		boolean result = false;
 		if (this.id != -1) {// si la id es -1 el artista no esta en la base de datos
 			update();// por lo que se acutualiza
@@ -118,7 +118,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 					}
 					result = true;
 				} catch (SQLException e) {
-					e.printStackTrace();
+					throw new DAOException("Fallo al guardar en la base de datos", e);
 				} finally {
 					try {
 						ps.close();
@@ -135,7 +135,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 		return result;
 	}
 
-	public boolean update() {
+	public boolean update() throws DAOException {
 		boolean result = false;
 
 		if (this.id == -1) {// si la id es -1 el artista no esta en la base de datos
@@ -153,8 +153,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 					ps.setInt(5, this.id);
 					ps.executeUpdate();
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					throw new DAOException("Fallo al actualizar en la base de datos", e);
 				} finally {
 					try {
 						ps.close();
@@ -169,7 +168,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 		return result;
 	}
 
-	public List<Disc> getAll() {
+	public List<Disc> getAll() throws DAOException {
 		List<Disc> result = new ArrayList<>();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
@@ -185,8 +184,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 							date.toLocalDate(), rs.getInt("reproducciones")));
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al cargar de la base de datos", e);
 			} finally {
 				try {
 					ps.close();
@@ -210,7 +208,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 		return null;
 	}
 
-	public List<Disc> getDiscByName(String name) {
+	public List<Disc> getDiscByName(String name) throws DAOException {
 		List<Disc> result = new ArrayList<>();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
@@ -227,8 +225,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 							date.toLocalDate(), rs.getInt("reproducciones")));
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al cargar de la base de datos", e);
 			} finally {
 				try {
 					ps.close();
@@ -242,7 +239,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 		return result;
 	}
 
-	public Disc getDiscById(int id) {
+	public Disc getDiscById(int id) throws DAOException {
 		Disc result = new Disc();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
@@ -260,8 +257,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 							rs.getInt("reproducciones"));
 				}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al cargar de la base de datos", e);
 			} finally {
 				try {
 					ps.close();

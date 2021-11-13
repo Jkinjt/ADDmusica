@@ -11,6 +11,7 @@ import java.util.List;
 
 import es.joaquin.music.model.Disc;
 import es.joaquin.music.model.Song;
+import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.DAO.SongDAO;
 import es.joaquin.music.uitls.MariaDBConexion;
 
@@ -174,7 +175,12 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 				Disc d=new Disc();
 				while (rs.next()) {
 					
-					d=dDAO.getDiscById(rs.getInt("ID_disco"));
+					try {
+						d=dDAO.getDiscById(rs.getInt("ID_disco"));
+					} catch (DAOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					result.add(new Song(
 							rs.getInt("ID"), rs.getString("c.nombre"), rs.getInt("duracion"),
 							rs.getInt("reproducciones"),d, rs.getString("g.nombre"))
@@ -217,7 +223,12 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 				Disc d=new Disc();
 				while (rs.next()) {
 					//se busca la id del disco que devuelva la consulta
-					d=dDAO.getDiscById(rs.getInt("ID_disco"));
+					try {
+						d=dDAO.getDiscById(rs.getInt("ID_disco"));
+					} catch (DAOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					new Song(
 							rs.getInt("ID"), rs.getString("c.nombre"), rs.getInt("duracion"),
 							rs.getInt("reproducciones"),d, rs.getString("g.nombre"));
@@ -253,7 +264,12 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 				Disc d=new Disc();
 				while (rs.next()) {
 					//se busca la id del disco que devuelva la consulta
-					d=dDAO.getDiscById(rs.getInt("ID_disco"));
+					try {
+						d=dDAO.getDiscById(rs.getInt("ID_disco"));
+					} catch (DAOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					result.add(new Song(
 							rs.getInt("ID"), rs.getString("c.nombre"), rs.getInt("duracion"),
 							rs.getInt("reproducciones"),d, rs.getString("g.nombre"))
