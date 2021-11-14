@@ -7,7 +7,7 @@ import es.joaquin.music.model.MariaDB.UserDaoImpMariaDB;
 
 public class UserTest {
 public static void main(String[] args) {
-	testDelete();
+	testGetByEmail();
 }
 
 static void testSave() {
@@ -32,6 +32,11 @@ static void testUserGetAll() {
 static void testGetById() {
 	UserDaoImpMariaDB u=new UserDaoImpMariaDB();
 	u.getUserById(4);
+	System.out.println(u);
+}
+static void testGetByEmail() {
+	UserDaoImpMariaDB u=new UserDaoImpMariaDB();
+	u.getUserByEmail("algo@correo.es");
 	System.out.println(u);
 }
 

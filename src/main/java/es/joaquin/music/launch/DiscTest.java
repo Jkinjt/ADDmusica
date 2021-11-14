@@ -10,8 +10,12 @@ import es.joaquin.music.model.MariaDB.DiscDaoImpMariaDB;
 
 public class DiscTest {
 	public static void main(String[] args) {
+		testDelete();
+		testGetAll();
 		testGetDiscById();
-		
+		testGetDiscByName();
+		testSave();
+		testUpdate();
 	}
 
 	static void testSave() {

@@ -23,6 +23,7 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 	private static final String DELETE = "DELETE FROM `usuario` WHERE ID=?";
 	private static final String SELECTALL = "SELECT ID, nombre, correo, foto FROM usuario";
 	private static final String SELECTBYID = "SELECT ID, nombre,correo,foto FROM usuario WHERE ID=?";
+	private static final String SELECTBYEMAIL = "SELECT ID, nombre,correo,foto FROM usuario WHERE correo LIKE ?";
 	private static final String SELECTBYNAME = "SELECT ID, nombre,correo,foto FROM usuario WHERE nombre=?";
 
 	public UserDaoImpMariaDB() {
@@ -208,6 +209,41 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 					this.picture= rs.getString("foto");
 				}
 				result=true;
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
+	}
+	
+	public boolean getUserByEmail(String email) {
+		boolean result = false;
+		con = MariaDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(SELECTBYEMAIL);
+				ps.setString(1, email);
+				rs = ps.executeQuery();
+				if (rs.next()) {
+					this.id=rs.getInt("ID");
+					this.name=rs.getString("nombre");
+					this.email=rs.getString("correo");
+					this.picture= rs.getString("foto");
+				}
+				if(this.id!=-1) {
+					result=true;
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

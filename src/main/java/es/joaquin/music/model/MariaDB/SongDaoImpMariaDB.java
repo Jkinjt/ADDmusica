@@ -11,6 +11,7 @@ import java.util.List;
 
 import es.joaquin.music.model.Disc;
 import es.joaquin.music.model.Song;
+import es.joaquin.music.model.UserList;
 import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.DAO.SongDAO;
 import es.joaquin.music.uitls.MariaDBConexion;
@@ -22,11 +23,11 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 		private static final String UPDATE="UPDATE cancion SET nombre=?,duracion=?,reproducciones=?,ID_disco=?,ID_genero=(SELECT ID from genero where nombre like ?) WHERE ID=?";
 		private static final String DELETE="DELETE FROM cancion WHERE ID=?";
 		private static final String SELECTALL="SELECT c.ID, c.nombre, c.duracion, c.reproducciones, c.ID_disco, g.nombre FROM cancion AS c, genero AS g WHERE c.ID_genero=g.ID";
-		private static final String SELECTBYID="SELECT ID, nombre, duracion, reproducciones, ID_disco, ID_genero FROM cancion WHERE ID=?";
+		private static final String SELECTBYID="SELECT c.ID, c.nombre, c.duracion, c.reproducciones, c.ID_disco, g.nombre FROM cancion AS c, genero AS g WHERE c.ID_genero=g.ID AND c.ID=?";
 		private static final String SELECTBYNAME="SELECT c.ID, c.nombre, c.duracion, c.reproducciones, c.ID_disco, g.nombre FROM cancion AS c, genero AS g WHERE c.ID_genero=g.ID AND c.nombre=?";
 		private static final String INSERTGENRE="INSERT INTO genero(nombre) VALUES (?)";
 		private static final String SELECTALLGENRE="SELECT ID, nombre FROM genero";
-		private static final String SELECTGENRE="SELECT ID FROM genero WHERE nombre LIKE ?";
+		private static final String SELECTGENREBYNAME="SELECT ID FROM genero WHERE nombre LIKE ?";
 		private Connection con;
 		
 		
@@ -208,15 +209,15 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 		return null;
 	}
 
-	public Song getSongById(int id) {
+	public Song getSongById(int id) throws DAOException {
 		Song result = new Song();
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
 			PreparedStatement ps = null;
 			ResultSet rs = null;
 			try {
-				ps = con.prepareStatement(SELECTBYNAME);
-				ps.setString(1, name);
+				ps = con.prepareStatement(SELECTBYID);
+				ps.setInt(1, id);
 				rs = ps.executeQuery();
 				//Se crea un disco
 				DiscDaoImpMariaDB dDAO=new DiscDaoImpMariaDB();
@@ -229,13 +230,12 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					new Song(
-							rs.getInt("ID"), rs.getString("c.nombre"), rs.getInt("duracion"),
-							rs.getInt("reproducciones"),d, rs.getString("g.nombre"));
+				result=	new Song(
+							rs.getInt("c.ID"), rs.getString("c.nombre"), rs.getInt("c.duracion"),
+							rs.getInt("c.reproducciones"),d, rs.getString("g.nombre"));
 					}
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new DAOException("Fallo al cargar la cancion de la base de datos");
 			} finally {
 				try {
 					ps.close();
@@ -271,8 +271,8 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 						e.printStackTrace();
 					}
 					result.add(new Song(
-							rs.getInt("ID"), rs.getString("c.nombre"), rs.getInt("duracion"),
-							rs.getInt("reproducciones"),d, rs.getString("g.nombre"))
+							rs.getInt("c.ID"), rs.getString("c.nombre"), rs.getInt("c.duracion"),
+							rs.getInt("c.reproducciones"),d, rs.getString("g.nombre"))
 							);}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -290,7 +290,7 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 		return result;
 	}
 
-	@Override
+	
 	public List<String> getAllGenres() {
 		List<String> result=new ArrayList<String>();
 		con = MariaDBConexion.getConexion();
@@ -328,7 +328,7 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 			ResultSet rs = null;
 			
 			try {
-				ps=con.prepareStatement(SELECTGENRE);
+				ps=con.prepareStatement(SELECTGENREBYNAME);
 				ps.setString(1, name);
 				rs=ps.executeQuery();
 				if(rs.next()) {
@@ -343,7 +343,7 @@ public class SongDaoImpMariaDB extends Song implements SongDAO {
 		return result;
 	}
 
-	@Override
+	
 	public boolean saveGenre() {
 		boolean result=false;
 		con = MariaDBConexion.getConexion();

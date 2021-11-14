@@ -69,8 +69,13 @@ public class SongTest {
 	static void testGetSongById() {
 		SongDaoImpMariaDB d=new SongDaoImpMariaDB();
 		Song a=new Song();
-		a=d.getSongById(6);
-		System.out.println(d.toString());
+		try {
+			a=d.getSongById(6);
+			System.out.println(d.toString());
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }

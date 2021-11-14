@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.joaquin.music.model.DAO.DAOException;
+
 public class UserList {
 
 	
@@ -49,6 +51,8 @@ public class UserList {
 		this.creator = creator;
 		this.date = date;
 		this.nSubscription = nSubscription;
+		this.users = new ArrayList<User>();
+		this.songs = new ArrayList<Song>();
 	}
 
 	public UserList(String name, String description, User creator, LocalDate date,int nSubscription) {
@@ -176,7 +180,40 @@ public class UserList {
 	public void setSongs(List<Song> songs) {
 		this.songs = songs;
 	}
+	
+	public boolean addSong(Song song) {
+		boolean result=false;
+		if(song!=null) {
+			this.songs.add(song);
+			result=true;
+		}
+		return result;
+	}
+	
+	public boolean removeSong(Song song) {
+		boolean result=false;
+		if(song!=null) {
+			this.songs.remove(song);
+		}
+		return result;
+	}
+	public boolean addUser(User user)  {
+		boolean result=false;
+		if(user!=null) {
+			this.users.add(user);
+			result=true;
+		}
+		return result;
+	}
 
+	public boolean removeUser(User user) {
+		boolean result=false;
+		if(user!=null) {
+			this.songs.remove(user);
+			result= true;
+		}
+		return result;
+	}
 	@Override
 	public String toString() {
 		return "UserList [id=" + id + ", name=" + name + ", description=" + description + ", creator=" + creator.getName()
