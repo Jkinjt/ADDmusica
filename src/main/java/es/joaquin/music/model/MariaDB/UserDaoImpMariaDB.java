@@ -1,6 +1,7 @@
 package es.joaquin.music.model.MariaDB;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,10 +9,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.joaquin.music.model.Artist;
+import es.joaquin.music.model.Disc;
 import es.joaquin.music.model.Song;
 import es.joaquin.music.model.User;
 import es.joaquin.music.model.UserList;
+import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.DAO.UserDAO;
 import es.joaquin.music.uitls.MariaDBConexion;
 
@@ -25,7 +27,9 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 	private static final String SELECTBYID = "SELECT ID, nombre,correo,foto FROM usuario WHERE ID=?";
 	private static final String SELECTBYEMAIL = "SELECT ID, nombre,correo,foto FROM usuario WHERE correo LIKE ?";
 	private static final String SELECTBYNAME = "SELECT ID, nombre,correo,foto FROM usuario WHERE nombre=?";
-
+	private static final String SELECTUSERLIST="SELECT l.ID, l.nombre,l.descripcion,l.fecha_creacion,l.nsubscriptores,l.ID_usuario FROM lista as l JOIN  suscrito AS s on s.ID_lista=l.ID WHERE\r\n"
+			+ "S.ID_usuario=?";
+	private static final String SELECTSONGLISTENED="SELECT c.ID, c.nombre,c.duracion, c.reproducciones, c.ID_disco,g.nombre from cancion as c, genero AS g, escucha AS e WHERE c.ID_genero=g.ID AND c.ID=e.ID_cancion AND e.ID_usuario=?";
 	public UserDaoImpMariaDB() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -293,20 +297,85 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 		}
 		return result;
 	}
+	@Override
+	public List<UserList> getUserList() throws DAOException {
+		List<UserList> result = new ArrayList<>();
+		con = MariaDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(SELECTUSERLIST);
+				ps.setInt(1, this.id);
+				rs = ps.executeQuery();
+				UserDaoImpMariaDB u = new UserDaoImpMariaDB();
+				Date date;
+				while (rs.next()) {
+					date = rs.getDate("l.fecha_creacion");
+					date.toLocalDate();
+					u.getUserById(rs.getInt("l.ID_usuario"));
+					result.add(new UserList(rs.getInt("l.ID"), rs.getString("l.nombre"), rs.getString("l.descripcion"), u,
+							date.toLocalDate(), rs.getInt("l.nsubscriptores")));
+				}
+			} catch (SQLException e) {
+				throw new DAOException("Fallo al cargar de la base de datos", e);
+			} finally {
+				try {
+					ps.close();
+					rs.close();
 
-	public List<UserList> getListUser() {
-		// TODO Auto-generated method stub
-		return null;
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
 	}
 
 	public List<UserList> getCreatedList() {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public List<Song> getSongs() {
+		List<Song> result = new ArrayList<>();
+		con = MariaDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			try {
+				ps = con.prepareStatement(SELECTSONGLISTENED);
+				ps.setInt(1, this.id);
+				rs = ps.executeQuery();
+				//Se crea un disco
+				DiscDaoImpMariaDB dDAO=new DiscDaoImpMariaDB();
+				Disc d=new Disc();
+				while (rs.next()) {
+					//se busca la id del disco que devuelva la consulta
+					try {
+						d=dDAO.getDiscById(rs.getInt("ID_disco"));
+					} catch (DAOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					result.add(new Song(
+							rs.getInt("c.ID"), rs.getString("c.nombre"), rs.getInt("c.duracion"),
+							rs.getInt("c.reproducciones"),d, rs.getString("g.nombre"))
+							);}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				try {
+					ps.close();
+					rs.close();
 
-	public List<Song> getSongsHeard() {
-		// TODO Auto-generated method stub
-		return null;
+				} catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		return result;
 	}
 
 }

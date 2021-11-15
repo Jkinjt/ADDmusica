@@ -34,6 +34,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 	private static final String DELETESONGUSED = "DELETE FROM `usa` WHERE ID_lista=? AND ID_cancion=?";
 	private static final String INSERTUSERSUBSCRIBE = "INSERT INTO `suscrito`(ID_lista,ID_usuario, fecha_suscripcion) VALUES (?,?,?);";
 	private static final String DELETEUSERSUBSCRIBE = "DELETE FROM `suscrito` WHERE ID_lista=? AND ID_usuario=?";
+	
 	// conexión
 	private Connection con;
 

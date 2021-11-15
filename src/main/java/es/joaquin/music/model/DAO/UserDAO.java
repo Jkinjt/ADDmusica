@@ -14,11 +14,9 @@ public interface UserDAO extends DAO {
 	boolean getUserById(int id);
 	//devuelve una lista de usuarios por si hay más de uno con el mismo nombre
 	List<User> getUserByName(String name);
-	//te devuelve las listas a las que se esta suscrito
-	List<UserList> getListUser();
+	
 	//devuelve las listas que el usuario ha creado
 	List<UserList> getCreatedList();
-	//te devuelve una lista de las canciones que ha escuchado
-	List<Song> getSongsHeard();
+	
 
 }

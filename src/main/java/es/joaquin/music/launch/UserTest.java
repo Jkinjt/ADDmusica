@@ -3,11 +3,12 @@ package es.joaquin.music.launch;
 import java.util.List;
 
 import es.joaquin.music.model.User;
+import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.MariaDB.UserDaoImpMariaDB;
 
 public class UserTest {
 public static void main(String[] args) {
-	testGetByEmail();
+	testGetSongs();
 }
 
 static void testSave() {
@@ -49,5 +50,30 @@ static void testDelete() {
 	UserDaoImpMariaDB u=new UserDaoImpMariaDB();
 	u.getUserById(3);
 	u.delete();
+}
+
+static void testGetListUser() {
+	UserDaoImpMariaDB u=new UserDaoImpMariaDB();
+	u.getUserByEmail("algo@algo");
+	System.out.println(u.toString());
+	try {
+		u.getUserList();
+		System.out.println(u.getUserList().toString());
+	} catch (DAOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+}
+static void testGetSongs() {
+	UserDaoImpMariaDB u=new UserDaoImpMariaDB();
+	u.getUserByEmail("algo@algo");
+	System.out.println(u.toString());
+	try {
+		u.getUserList();
+		System.out.println(u.getSongs().toString());
+	} catch (DAOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 }
 }

@@ -17,8 +17,9 @@ public class PrimaryController {
 
 	@FXML
 	private TextField email;
-
+	@FXML
 	private Button conect;
+	@FXML
 	private Button registrer;
 
 	@FXML
@@ -35,7 +36,7 @@ public class PrimaryController {
 		// se comprueba si el usuario se encuentra en la base de datos
 		if (user.getUserByEmail(email.getText())) {
 			// se setea la instancia
-			userSingleton = new UserSingleton(user);
+			userSingleton = UserSingleton.getInstance(user);
 			result = true;
 
 		}

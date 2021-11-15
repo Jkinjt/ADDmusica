@@ -26,6 +26,7 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 	private static final String SELECTALL = "SELECT ID, nombre, foto, reproducciones, fecha FROM disco";
 	private static final String SELECTBYID = "SELECT ID, nombre, foto, reproducciones, fecha FROM disco WHERE id=?";
 	private static final String SELECTBYNAME = "SELECT ID, nombre, foto, reproducciones,fecha FROM disco WHERE nombre=?";
+	private static final String SELECTARTIST="SELECT a.ID, a.nombre, a.nacionalidad, a.foto FROM artista AS a JOIN hace AS h ON a.ID=h.ID_artista WHERE h.ID_disco=?";
 	private Connection con;
 
 	public DiscDaoImpMariaDB() {
@@ -270,5 +271,37 @@ public class DiscDaoImpMariaDB extends Disc implements DiscDAO {
 		}
 		return result;
 	}
-
+	@Override
+	public Artist getArtist() throws DAOException {
+		con = MariaDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps=null;
+			ResultSet rs=null;
+			try {
+				ps = con.prepareStatement(SELECTARTIST);
+				ps.setInt(1,this.id);
+				rs=ps.executeQuery();
+				if(rs.next()) {
+					this.artist=new Artist(rs.getInt("a.ID"),
+							rs.getString("a.nombre"),
+							rs.getString("a.nacionalidad"),
+							rs.getString("a.foto"));
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				throw new DAOException("Fallo al cargar en la base de datos", e);
+			} finally {
+				try {
+					ps.close();
+					rs.close();
+					
+				}catch (SQLException e) {
+					// TODO: handle exception
+				}
+			}
+		}
+		
+		
+		return artist;
+	}
 }

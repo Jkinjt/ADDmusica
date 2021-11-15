@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.joaquin.music.model.DAO.DAOException;
+
 /**
  * @author Jkin
  *
@@ -127,7 +129,7 @@ public class Disc {
 	public void setReproductions(int reproductions) {
 		this.reproductions = reproductions;
 	}
-	public Artist getArtist() {
+	public Artist getArtist() throws DAOException {
 		return artist;
 	}
 	public void setArtist(Artist artist) {

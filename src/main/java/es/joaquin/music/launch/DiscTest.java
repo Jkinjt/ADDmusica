@@ -10,12 +10,7 @@ import es.joaquin.music.model.MariaDB.DiscDaoImpMariaDB;
 
 public class DiscTest {
 	public static void main(String[] args) {
-		testDelete();
-		testGetAll();
-		testGetDiscById();
-		testGetDiscByName();
-		testSave();
-		testUpdate();
+		testGetArtist();
 	}
 
 	static void testSave() {
@@ -79,5 +74,17 @@ public class DiscTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	static void testGetArtist() {
+		DiscDaoImpMariaDB d=new DiscDaoImpMariaDB();
+		try {
+			Disc d1=d.getDiscById(2);
+			d=new DiscDaoImpMariaDB(d1);
+			System.out.println(d.getArtist().getName());
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

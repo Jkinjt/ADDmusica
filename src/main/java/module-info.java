@@ -7,5 +7,6 @@ module es.joaquin.music {
 
     opens es.joaquin.music to javafx.fxml, java.xml.bind;
     opens es.joaquin.music.uitls to java.xml.bind;
+    opens es.joaquin.music.model to javafx.base;
     exports es.joaquin.music;
 }

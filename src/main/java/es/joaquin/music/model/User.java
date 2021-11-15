@@ -6,6 +6,8 @@ package es.joaquin.music.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.joaquin.music.model.DAO.DAOException;
+
 /**
  * @author Jkin
  *
@@ -129,7 +131,7 @@ public class User {
 
 
 
-	public List<UserList> getUserList() {
+	public List<UserList> getUserList() throws DAOException {
 		return userList;
 	}
 

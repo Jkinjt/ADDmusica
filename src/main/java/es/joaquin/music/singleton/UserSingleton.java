@@ -7,7 +7,7 @@ public class UserSingleton {
 
 	private static UserSingleton _instance;
 	private static UserDaoImpMariaDB user;
-	public UserSingleton( UserDaoImpMariaDB user) {
+	private UserSingleton( UserDaoImpMariaDB user) {
 		super();
 		this.user = user;
 	}
@@ -18,6 +18,20 @@ public class UserSingleton {
 			_instance=new UserSingleton(user);
 		}
 		return _instance;
+	}
+	public static UserSingleton getInstance() {
+		
+		return _instance;
+	}
+
+
+	public static UserDaoImpMariaDB getUser() {
+		return user;
+	}
+
+
+	public static void setUser(UserDaoImpMariaDB user) {
+		UserSingleton.user = user;
 	}
 	
 }
