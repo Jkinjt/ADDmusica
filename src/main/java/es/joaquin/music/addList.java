@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import es.joaquin.music.model.Song;
 import es.joaquin.music.model.User;
@@ -22,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -142,15 +144,17 @@ public class addList {
 		}
 
 		public void removeList() {
-
-			UserList ul = userLists.getSelectionModel().getSelectedItem();
-			UserSingleton.getUser().removeList(ul);
+			if(showRomove()) {
+				
+				UserList ul = userLists.getSelectionModel().getSelectedItem();
+				UserSingleton.getUser().removeList(ul);
 				try {
 					setUserList(UserSingleton.getUser().getUserList());
 				} catch (DAOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}
 			
 
 		}
@@ -220,5 +224,17 @@ public class addList {
 			}
 			
 		}
+		
+		public boolean showRomove() {
+	        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+	        alert.setTitle("Confirme la acción");
+	        alert.setHeaderText("¿Estas seguro de querer borrar la lista?");
+	        Optional<ButtonType> result = alert.showAndWait();
+	        if (result.get() == ButtonType.OK) {
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    }
 
 }

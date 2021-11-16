@@ -186,7 +186,7 @@ public class editList {
 	public void endList() {
 		// si se guarda correctamente se pasa a la otra pantalla
 		if (saveList()) {
-			newModal("secondary.fxml");
+			exit();
 		}else {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
@@ -204,7 +204,7 @@ public class editList {
 		if ((!this.nameList.getText().equals("") && !this.descriptionList.getText().equals("")) && userList.getSongs().size() != 0) {
 			userl.add(this.user);
 			// se introducen los atributos a la lista
-			userListDAO = new UserListDaoImpMariaDB(this.nameList.getText(), this.descriptionList.getText(), user,
+			userListDAO = new UserListDaoImpMariaDB(UserSingleton.getUserList().getId()  ,this.nameList.getText(), this.descriptionList.getText(), user,
 					LocalDate.now(), 0);
 			// se guarda la lista en la base de datos
 			try {

@@ -98,7 +98,7 @@ public class SecondaryController {
 			listSubscriptionColum.setCellValueFactory(eachList -> {
 				SimpleStringProperty v = new SimpleStringProperty();
 				// se convierte cada entero en una cadena
-				v.setValue("" + eachList.getValue().getId());
+				v.setValue("" + eachList.getValue().getnSubscription());
 				return v;
 			});
 		} catch (DAOException e) {
@@ -159,6 +159,7 @@ public class SecondaryController {
 	}
 	public void removeUser() {
 		if(showRomove()) {
+			System.out.print(UserSingleton.getUser().getId());
 			if(UserSingleton.getUser().delete()) {
 				exit();
 			}
@@ -192,7 +193,16 @@ public class SecondaryController {
 			modalStage.initOwner(App.rootstage);
 			Scene modalScene = new Scene(modal);
 			modalStage.setScene(modalScene);
+			//este metodo se ejecuta una vez se vuelve a la pantalla
 			modalStage.showAndWait();
+			//se vuelven a cargar las listas
+			setListTable();
+			try {
+				setSongTable(user.getSongs());
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			modalStage.setResizable(false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -203,7 +213,7 @@ public class SecondaryController {
 	public boolean showRomove() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirme la acción");
-        alert.setHeaderText("¿Estas seguro de querer borrar el usuario ?");
+        alert.setHeaderText("¿Estas seguro de querer borrar el usuario?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             return true;

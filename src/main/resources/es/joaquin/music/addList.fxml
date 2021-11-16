@@ -50,6 +50,7 @@
                            <children>
                               <Button fx:id="removeListButton" layoutX="194.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeList" text="Borrar lista" />
                               <Button fx:id="exitButton" layoutX="21.0" layoutY="31.0" mnemonicParsing="false" onAction="#exit" text="Atras" />
+                              <Button layoutX="85.0" layoutY="31.0" mnemonicParsing="false" onAction="#endList" text="Guardar Listas" />
                            </children>
                         </AnchorPane>
                      </children>

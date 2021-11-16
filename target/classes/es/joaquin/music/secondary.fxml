@@ -48,6 +48,7 @@
                         </AnchorPane>
                      </children>
                   </HBox>
+                  <Button layoutX="599.0" layoutY="14.0" mnemonicParsing="false" onAction="#setListTable" text="Actualizar" />
                </children>
             </AnchorPane>
             <AnchorPane prefHeight="310.0" prefWidth="545.0">
@@ -128,7 +129,7 @@
                         <AnchorPane prefHeight="86.0" prefWidth="366.0">
                            <children>
                               <Button fx:id="disconet" layoutX="57.0" layoutY="31.0" mnemonicParsing="false" onAction="#exit" text="Desconectarse" />
-                              <Button layoutX="220.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="Borrar Usuario" />
+                              <Button fx:id="deleteUser" layoutX="220.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="Borrar Usuario" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="86.0" prefWidth="314.0">

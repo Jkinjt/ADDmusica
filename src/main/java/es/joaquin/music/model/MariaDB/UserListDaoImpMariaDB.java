@@ -34,7 +34,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 	private static final String DELETESONGUSED = "DELETE FROM `usa` WHERE ID_lista=? AND ID_cancion=?";
 	private static final String INSERTUSERSUBSCRIBE = "INSERT INTO `suscrito`(ID_lista,ID_usuario, fecha_suscripcion) VALUES (?,?,?);";
 	private static final String DELETEUSERSUBSCRIBE = "DELETE FROM `suscrito` WHERE ID_lista=? AND ID_usuario=?";
-	
+
 	// conexión
 	private Connection con;
 
@@ -59,7 +59,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 		super(name, description, creator, date, nSubscription);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public UserListDaoImpMariaDB(String name, String description, User creator, LocalDate date, int nSubscription,
 			List<User> users, List<Song> songs) {
 		super(name, description, creator, date, nSubscription, users, songs);
@@ -159,9 +159,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 							this.id = rs.getInt(1);
 							result = true;
 						}
-
 					}
-
 					// se guarda la id para a�adirsela al usuario y no se guarde 2 veces en la base
 					// de datos
 
@@ -178,13 +176,12 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 			}
 
 		}
-
 		return result;
 	}
 
 	public boolean update() throws DAOException {
 		boolean result = false;
-
+		System.out.println(this.id);
 		if (this.id == -1) {// si la id es -1 el artista no esta en la base de datos
 			save();// por lo que se guarda
 		} else {
@@ -289,7 +286,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 
 	@Override
 	public List<Song> getSongs() {
-		if (songs.size()==0) {
+		if (songs.size() == 0) {
 			try {
 				songs = getSongByList(this.id);
 			} catch (DAOException e) {
@@ -533,8 +530,6 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 
 					result = true;
 				}
-
-				
 
 			} catch (SQLException e) {
 				throw new DAOException("Fallo al guarrdar en la base de datos", e);

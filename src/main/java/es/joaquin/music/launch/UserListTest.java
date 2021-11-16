@@ -14,7 +14,7 @@ import es.joaquin.music.model.MariaDB.UserListDaoImpMariaDB;
 public class UserListTest {
 
 	public static void main(String[] args) {
-		getSongsTest();
+		updateTest();
 
 	}
 
@@ -22,10 +22,11 @@ public class UserListTest {
 		UserDaoImpMariaDB uDAO = new UserDaoImpMariaDB();
 		uDAO.getUserById(1);
 		User u = uDAO;
-		UserListDaoImpMariaDB ul = new UserListDaoImpMariaDB("Rockabily", "Selección de las mejores canciones", u,
+		UserListDaoImpMariaDB ul = new UserListDaoImpMariaDB("Punk", "Selección de las mejores canciones", u,
 				LocalDate.now(), 3);
 		try {
 			ul.save();
+			System.out.println(ul.getId());
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -40,8 +41,9 @@ public class UserListTest {
 				LocalDate.now(), 3);
 		try {
 			ul.save();
-			ul.setName("Regge");
-			ul.setDescription("Mejores canciones para estar en la playa");
+			ul.setName("Rap");
+			ul.setDescription("Mejores canciones para escuchar");
+			System.out.println(ul.getId());
 			ul.update();
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
