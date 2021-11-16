@@ -1,5 +1,6 @@
 package es.joaquin.music.launch;
 
+import java.util.Iterator;
 import java.util.List;
 
 import es.joaquin.music.model.Disc;
@@ -17,6 +18,7 @@ public class SongTest {
 	public static void tesSaveGenre() {
 		SongDaoImpMariaDB s=new SongDaoImpMariaDB("loka",12,1,new Disc(),"clasica");
 		s.saveGenre();
+		
 	}
 	
 	public static void testGetAllGenres() {

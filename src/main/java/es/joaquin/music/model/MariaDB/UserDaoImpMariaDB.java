@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,12 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 	private static final String SELECTBYID = "SELECT ID, nombre,correo,foto FROM usuario WHERE ID=?";
 	private static final String SELECTBYEMAIL = "SELECT ID, nombre,correo,foto FROM usuario WHERE correo LIKE ?";
 	private static final String SELECTBYNAME = "SELECT ID, nombre,correo,foto FROM usuario WHERE nombre=?";
-	private static final String SELECTUSERLIST="SELECT l.ID, l.nombre,l.descripcion,l.fecha_creacion,l.nsubscriptores,l.ID_usuario FROM lista as l JOIN  suscrito AS s on s.ID_lista=l.ID WHERE\r\n"
+	private static final String SELECTUSERLIST = "SELECT l.ID, l.nombre,l.descripcion,l.fecha_creacion,l.nsubscriptores,l.ID_usuario FROM lista as l JOIN  suscrito AS s on s.ID_lista=l.ID WHERE\r\n"
 			+ "S.ID_usuario=?";
-	private static final String SELECTSONGLISTENED="SELECT c.ID, c.nombre,c.duracion, c.reproducciones, c.ID_disco,g.nombre from cancion as c, genero AS g, escucha AS e WHERE c.ID_genero=g.ID AND c.ID=e.ID_cancion AND e.ID_usuario=?";
+	private static final String SELECTSONGLISTENED = "SELECT c.ID, c.nombre,c.duracion, c.reproducciones, c.ID_disco,g.nombre from cancion as c, genero AS g, escucha AS e WHERE c.ID_genero=g.ID AND c.ID=e.ID_cancion AND e.ID_usuario=?";
+	private static final String INSERTLISTSUBSCRIBE = "INSERT INTO `suscrito`(ID_lista,ID_usuario, fecha_suscripcion) VALUES (?,?,?);";
+	private static final String DELETELISTSUBSCRIBE = "DELETE FROM `suscrito` WHERE ID_lista=? AND ID_usuario=?";
+
 	public UserDaoImpMariaDB() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -207,12 +211,12 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 				ps.setInt(1, id);
 				rs = ps.executeQuery();
 				if (rs.next()) {
-					this.id=id;
-					this.name=rs.getString("nombre");
-					this.email=rs.getString("correo");
-					this.picture= rs.getString("foto");
+					this.id = id;
+					this.name = rs.getString("nombre");
+					this.email = rs.getString("correo");
+					this.picture = rs.getString("foto");
 				}
-				result=true;
+				result = true;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -228,7 +232,7 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 		}
 		return result;
 	}
-	
+
 	public boolean getUserByEmail(String email) {
 		boolean result = false;
 		con = MariaDBConexion.getConexion();
@@ -240,13 +244,13 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 				ps.setString(1, email);
 				rs = ps.executeQuery();
 				if (rs.next()) {
-					this.id=rs.getInt("ID");
-					this.name=rs.getString("nombre");
-					this.email=rs.getString("correo");
-					this.picture= rs.getString("foto");
+					this.id = rs.getInt("ID");
+					this.name = rs.getString("nombre");
+					this.email = rs.getString("correo");
+					this.picture = rs.getString("foto");
 				}
-				if(this.id!=-1) {
-					result=true;
+				if (this.id != -1) {
+					result = true;
 				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -275,13 +279,11 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 				ps.setString(1, name);
 				rs = ps.executeQuery();
 				while (rs.next()) {
-					result.add(new User(rs.getInt("ID"),
-							rs.getString("nombre"),
-							rs.getString("correo"),
-							rs.getString("foto") ));
-					
+					result.add(new User(rs.getInt("ID"), rs.getString("nombre"), rs.getString("correo"),
+							rs.getString("foto")));
+
 				}
-				
+
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -297,6 +299,7 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 		}
 		return result;
 	}
+
 	@Override
 	public List<UserList> getUserList() throws DAOException {
 		List<UserList> result = new ArrayList<>();
@@ -314,8 +317,8 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 					date = rs.getDate("l.fecha_creacion");
 					date.toLocalDate();
 					u.getUserById(rs.getInt("l.ID_usuario"));
-					result.add(new UserList(rs.getInt("l.ID"), rs.getString("l.nombre"), rs.getString("l.descripcion"), u,
-							date.toLocalDate(), rs.getInt("l.nsubscriptores")));
+					result.add(new UserList(rs.getInt("l.ID"), rs.getString("l.nombre"), rs.getString("l.descripcion"),
+							u, date.toLocalDate(), rs.getInt("l.nsubscriptores")));
 				}
 			} catch (SQLException e) {
 				throw new DAOException("Fallo al cargar de la base de datos", e);
@@ -336,6 +339,7 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	@Override
 	public List<Song> getSongs() {
 		List<Song> result = new ArrayList<>();
@@ -347,21 +351,20 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 				ps = con.prepareStatement(SELECTSONGLISTENED);
 				ps.setInt(1, this.id);
 				rs = ps.executeQuery();
-				//Se crea un disco
-				DiscDaoImpMariaDB dDAO=new DiscDaoImpMariaDB();
-				Disc d=new Disc();
+				// Se crea un disco
+				DiscDaoImpMariaDB dDAO = new DiscDaoImpMariaDB();
+				Disc d = new Disc();
 				while (rs.next()) {
-					//se busca la id del disco que devuelva la consulta
+					// se busca la id del disco que devuelva la consulta
 					try {
-						d=dDAO.getDiscById(rs.getInt("ID_disco"));
+						d = dDAO.getDiscById(rs.getInt("ID_disco"));
 					} catch (DAOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					result.add(new Song(
-							rs.getInt("c.ID"), rs.getString("c.nombre"), rs.getInt("c.duracion"),
-							rs.getInt("c.reproducciones"),d, rs.getString("g.nombre"))
-							);}
+					result.add(new Song(rs.getInt("c.ID"), rs.getString("c.nombre"), rs.getInt("c.duracion"),
+							rs.getInt("c.reproducciones"), d, rs.getString("g.nombre")));
+				}
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -374,6 +377,108 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 					// TODO: handle exception
 				}
 			}
+		}
+		return result;
+	}
+
+	@Override
+	public boolean addList(UserList userList) {
+		boolean result = false;
+		if(userList!=null) {
+			try {
+				if(saveUserListSubscribe(userList)) {
+					if (this.userList.add(userList)) {
+						result = true;
+					}
+					
+				}
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+
+	}
+	public boolean saveUserListSubscribe(UserList userList) throws DAOException {
+		boolean result = false;
+
+		con = MariaDBConexion.getConexion();
+		if (con != null && !this.name.equals("")) {
+			PreparedStatement ps = null;
+
+			try {
+				// se debe poner Statement.RETURN_GENERATED_KEYS para obtener el id en la base
+				// de datos cuando se guarde
+				ps = con.prepareStatement(INSERTLISTSUBSCRIBE);
+				ps.setInt(1, userList.getId());
+				ps.setInt(2, this.id);
+				ps.setDate(3, Date.valueOf(LocalDate.now()));
+
+				// en caso de que no se guarde se lanza una excepción
+				if (ps.executeUpdate() == 0) {
+					throw new DAOException("Fallo al guardar");
+				} else {
+
+					result = true;
+				}
+
+				
+
+			} catch (SQLException e) {
+				throw new DAOException("Fallo al guarrdar en la base de datos", e);
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return result;
+	}
+
+	@Override
+	public boolean removeList(UserList userList) {
+		boolean result = false;
+		if (userList != null) {
+			if (removeList(userList)) {
+				if (this.userList.remove(userList)) {
+					result = true;
+				}
+			}
+		}
+		return result;
+	}
+
+	public boolean removeListSubscribe(UserList userList) throws DAOException {
+		boolean result = false;
+		con = MariaDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			try {
+				ps = con.prepareStatement(DELETELISTSUBSCRIBE);
+				ps.setInt(1, userList.getId());
+				ps.setInt(2, this.id);
+				if (ps.executeUpdate() == 0) {
+					throw new DAOException("Fallo al ejecutar la consulta de borrado");
+				} else {
+					result = true;
+				}
+			} catch (SQLException e) {
+				throw new DAOException("Fallo al borrar en la base de datos", e);
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
 		}
 		return result;
 	}

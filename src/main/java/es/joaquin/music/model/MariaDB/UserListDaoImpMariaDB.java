@@ -59,7 +59,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 		super(name, description, creator, date, nSubscription);
 		// TODO Auto-generated constructor stub
 	}
-
+	
 	public UserListDaoImpMariaDB(String name, String description, User creator, LocalDate date, int nSubscription,
 			List<User> users, List<Song> songs) {
 		super(name, description, creator, date, nSubscription, users, songs);
@@ -170,7 +170,6 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 				} finally {
 					try {
 						ps.close();
-						rs.close();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -290,7 +289,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 
 	@Override
 	public List<Song> getSongs() {
-		if (songs.size() == 0) {
+		if (songs.size()==0) {
 			try {
 				songs = getSongByList(this.id);
 			} catch (DAOException e) {
@@ -523,8 +522,8 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 				// se debe poner Statement.RETURN_GENERATED_KEYS para obtener el id en la base
 				// de datos cuando se guarde
 				ps = con.prepareStatement(INSERTUSERSUBSCRIBE);
-				ps.setInt(1, user.getId());
-				ps.setInt(2, this.id);
+				ps.setInt(1, this.id);
+				ps.setInt(2, user.getId());
 				ps.setDate(3, Date.valueOf(LocalDate.now()));
 
 				// en caso de que no se guarde se lanza una excepción
@@ -535,8 +534,7 @@ public class UserListDaoImpMariaDB extends UserList implements UserListDAO {
 					result = true;
 				}
 
-				// se guarda la id para a�adirsela al usuario y no se guarde 2 veces en la base
-				// de datos
+				
 
 			} catch (SQLException e) {
 				throw new DAOException("Fallo al guarrdar en la base de datos", e);

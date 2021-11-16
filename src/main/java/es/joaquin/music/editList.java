@@ -7,7 +7,6 @@ import java.util.List;
 
 import es.joaquin.music.model.Song;
 import es.joaquin.music.model.User;
-import es.joaquin.music.model.UserList;
 import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.MariaDB.DiscDaoImpMariaDB;
 import es.joaquin.music.model.MariaDB.SongDaoImpMariaDB;
@@ -24,13 +23,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class CreateList {
+public class editList {
 	// tiene que ser estatica para que se pueda usar en el método setSongTable
 	private static DiscDaoImpMariaDB dDAO = new DiscDaoImpMariaDB();
 	private UserSingleton userSignleton;
 	private UserDaoImpMariaDB user;
+	private UserListDaoImpMariaDB userList;
 
-	List<Song> sl = new ArrayList<>();
 
 	@FXML
 	private Button saveListButton;
@@ -69,6 +68,15 @@ public class CreateList {
 	private void initialize() {
 		userSignleton = UserSingleton.getInstance();
 		user = UserSingleton.getUser();
+		userList=UserSingleton.getUserList();
+		nameList.setText(userList.getName());
+		descriptionList.setText(userList.getDescription());
+		try {
+			setSongsList(userList.getSongs());
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -122,9 +130,9 @@ public class CreateList {
 	public void getSong() {
 
 		Song s = songsSearch.getSelectionModel().getSelectedItem();
-		if (this.sl.add(s)) {
+		if (this.userList.addSong(s)) {
 			try {
-				setSongsList(sl);
+				setSongsList(userList.getSongs());
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -136,9 +144,9 @@ public class CreateList {
 	public void removeSong() {
 
 		Song s = songsSearch.getSelectionModel().getSelectedItem();
-		if (this.sl.remove(s)) {
+		if (this.userList.removeSong(s)) {
 			try {
-				setSongsList(sl);
+				setSongsList(this.userList.getSongs());
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -148,7 +156,6 @@ public class CreateList {
 	}
 
 	public void setSongsList(List<Song> songsList) throws DAOException {
-
 		this.songsList.setItems(FXCollections.observableArrayList(songsList));
 		this.songsListNameColum.setCellValueFactory(new PropertyValueFactory<Song, String>("name"));
 		this.songListDiscColum.setCellValueFactory(eachSong -> {
@@ -188,24 +195,15 @@ public class CreateList {
 		UserListDaoImpMariaDB userListDAO;
 		List<User> userl = new ArrayList<>();
 		// se comprueba que el correo no existe y los campos de texto no esten vacios
-		if ((!this.nameList.getText().equals("") && !this.descriptionList.getText().equals("")) && sl.size() != 0) {
+		if ((!this.nameList.getText().equals("") && !this.descriptionList.getText().equals("")) && userList.getSongs().size() != 0) {
 			userl.add(this.user);
 			// se introducen los atributos a la lista
 			userListDAO = new UserListDaoImpMariaDB(this.nameList.getText(), this.descriptionList.getText(), user,
 					LocalDate.now(), 0);
 			// se guarda la lista en la base de datos
 			try {
-				userListDAO.save();
-				for (Song song : sl) {
-					// se añade cada canción a la lista de canciones y se guarda en la base se datos
-					userListDAO.addSong(song);
-
-				}
-				// se añade el usuario que se ha registrado en la lista
-				if (userListDAO.addUser(user)) {
-					user.addList(userListDAO);
-					result = true;
-				}
+				userListDAO.update();
+				result=true;
 
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
@@ -223,7 +221,7 @@ public class CreateList {
 				alert.setContentText("campo de nombre vacio");
 			} else if (this.descriptionList.getText().equals("")) {
 				alert.setContentText("La descripción esta vacia vacio");
-			} else if (sl.size() == 0) {
+			} else if (userList.getSongs().size() == 0) {
 				alert.setContentText("La lista esta vacia");
 			}
 			alert.showAndWait();
@@ -233,8 +231,6 @@ public class CreateList {
 		return result;
 	}
 
-	
-	
 	public void exit() {
 		try {
 			App.setRoot("secondary");

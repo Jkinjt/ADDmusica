@@ -104,7 +104,7 @@
                                     </AnchorPane>
                                     <AnchorPane prefHeight="301.0" prefWidth="322.0">
                                        <children>
-                                          <TableView fx:id="userLists" prefHeight="310.0" prefWidth="322.0">
+                                          <TableView fx:id="userLists" onMouseClicked="#getUserList" prefHeight="310.0" prefWidth="322.0">
                                             <columns>
                                               <TableColumn fx:id="listNameColum" prefWidth="75.0" text="Nombre" />
                                               <TableColumn fx:id="listDescriptionColum" prefWidth="156.79998016357422" text="Descripción" />
@@ -132,7 +132,25 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="86.0" prefWidth="314.0">
                            <children>
-                              <Button layoutX="131.0" layoutY="31.0" mnemonicParsing="false" onAction="#changeCreateList" text="Crear lista" />
+                              <HBox layoutX="-23.0" prefHeight="84.0" prefWidth="337.0">
+                                 <children>
+                                    <AnchorPane prefHeight="84.0" prefWidth="105.0">
+                                       <children>
+                                          <Button fx:id="addList" layoutX="14.0" layoutY="29.0" mnemonicParsing="false" onAction="#addList" text="Añadir lista" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="84.0" prefWidth="106.0">
+                                       <children>
+                                          <Button fx:id="editList" layoutX="17.0" layoutY="29.0" mnemonicParsing="false" onAction="#editList" text="Editar lista" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane prefHeight="84.0" prefWidth="128.0">
+                                       <children>
+                                          <Button layoutX="14.0" layoutY="29.0" mnemonicParsing="false" onAction="#changeCreateList" text="Crear lista" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </HBox>
                            </children>
                         </AnchorPane>
                      </children>

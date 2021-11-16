@@ -155,7 +155,26 @@ public class User {
 	public void setSongs(List<Song> songs) {
 		this.songs = songs;
 	}
-
+	
+	public boolean addList(UserList userList) {
+		boolean result=false;
+		if(this.userList.add(userList)) {
+			result=true;
+		}
+		
+		return result;
+		
+	}
+	public boolean removeList(UserList userList) {
+		boolean result=false;
+		if(this.userList.remove(userList)) {
+			result=true;
+		}
+		
+		return result;
+		
+	}
+	
 
 
 

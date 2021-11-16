@@ -1,6 +1,5 @@
 package es.joaquin.music;
 
-import java.io.File;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
@@ -8,9 +7,14 @@ import javax.xml.bind.JAXBException;
 import es.joaquin.music.model.MariaDB.UserDaoImpMariaDB;
 import es.joaquin.music.singleton.UserSingleton;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class PrimaryController {
 	UserSingleton userSingleton;
@@ -25,7 +29,21 @@ public class PrimaryController {
 	@FXML
 	private void getin() throws IOException, JAXBException {
 		if (setName()) {
-			App.setRoot("secondary");
+			FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("secondary.fxml"));
+			Parent modal;
+			try {
+				modal = fxmlLoader.load();
+				Stage modalStage = new Stage();
+				modalStage.initModality(Modality.APPLICATION_MODAL);
+				modalStage.initOwner(App.rootstage);
+				Scene modalScene = new Scene(modal);
+				modalStage.setScene(modalScene);
+				modalStage.showAndWait();
+				modalStage.setResizable(false);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 

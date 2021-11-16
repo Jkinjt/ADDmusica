@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="497.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.joaquin.music.CreateList">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="497.0" prefWidth="608.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.joaquin.music.addList">
    <children>
       <HBox layoutX="-1.0" prefHeight="400.0" prefWidth="600.0">
          <children>
@@ -19,17 +19,10 @@
                <children>
                   <VBox prefHeight="491.0" prefWidth="293.0">
                      <children>
-                        <AnchorPane prefHeight="145.0" prefWidth="275.0">
+                        <AnchorPane prefHeight="145.0" prefWidth="275.0" />
+                        <AnchorPane prefHeight="40.0" prefWidth="294.0">
                            <children>
-                              <TextField fx:id="nameList" layoutX="33.0" layoutY="44.0" promptText="Nombre" />
-                              <Text layoutX="33.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre de la lista" />
-                              <Text layoutX="33.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descripcion de la lista" />
-                              <TextField fx:id="descriptionList" layoutX="33.0" layoutY="100.0" promptText="Descripcion" />
-                           </children>
-                        </AnchorPane>
-                        <AnchorPane prefHeight="40.0" prefWidth="275.0">
-                           <children>
-                              <Text fx:id="songListened" layoutX="67.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Canciones de la lista">
+                              <Text fx:id="songListened" layoutX="109.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tus Listas">
                                  <font>
                                     <Font size="18.0" />
                                  </font>
@@ -38,11 +31,11 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="218.0" prefWidth="275.0">
                            <children>
-                              <TableView fx:id="songsList" onMouseClicked="#removeSong" prefHeight="217.0" prefWidth="275.0">
+                              <TableView fx:id="userLists" prefHeight="217.0" prefWidth="275.0">
                                  <columns>
-                                    <TableColumn fx:id="songsListNameColum" prefWidth="100.79999083280563" text="Canción" />
-                                    <TableColumn fx:id="songListDiscColum" prefWidth="86.4000244140625" text="Album" />
-                                    <TableColumn fx:id="songListArtistColum" prefWidth="99.99998474121094" text="Artista" />
+                                    <TableColumn fx:id="userListNameColum" prefWidth="100.79999083280563" text="Nombre" />
+                                    <TableColumn fx:id="userListDescriptionColum" prefWidth="86.4000244140625" text="Descripción" />
+                                    <TableColumn fx:id="userListSubscriptionColum" prefWidth="99.99998474121094" text="Subscritos" />
                                  </columns>
                                  <padding>
                                     <Insets left="1.0" />
@@ -55,7 +48,7 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="86.0" prefWidth="294.0">
                            <children>
-                              <Button fx:id="saveListButton" layoutX="194.0" layoutY="31.0" mnemonicParsing="false" onAction="#endList" text="Guardar lista" />
+                              <Button fx:id="saveListButton" layoutX="194.0" layoutY="31.0" mnemonicParsing="false" text="Guardar lista" />
                               <Button layoutX="21.0" layoutY="31.0" mnemonicParsing="false" onAction="#exit" text="Atras" />
                            </children>
                         </AnchorPane>
@@ -87,11 +80,11 @@
                               <Insets />
                            </VBox.margin>
                         </AnchorPane>
-                        <TableView fx:id="songsSearch" onMouseClicked="#getSong" prefHeight="239.0" prefWidth="278.0">
+                        <TableView fx:id="allUserLists" onMouseClicked="#getUserList" prefHeight="239.0" prefWidth="278.0">
                            <columns>
-                              <TableColumn fx:id="songNameColum" prefWidth="100.79999083280563" text="Canción" />
-                              <TableColumn fx:id="songDiscColum" prefWidth="86.4000244140625" text="Album" />
-                              <TableColumn fx:id="songArtistColum" prefWidth="99.99998474121094" text="Artista" />
+                              <TableColumn fx:id="listNameColum" prefWidth="87.99999845027924" text="Nombre" />
+                              <TableColumn fx:id="listDescriptionColum" prefWidth="92.00000762939453" text="Descripción" />
+                              <TableColumn fx:id="listSubscriptionColum" prefWidth="86.39999389648438" text="Subscritos" />
                            </columns>
                            <padding>
                               <Insets left="1.0" />

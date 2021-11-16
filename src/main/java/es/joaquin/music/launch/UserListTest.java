@@ -14,7 +14,7 @@ import es.joaquin.music.model.MariaDB.UserListDaoImpMariaDB;
 public class UserListTest {
 
 	public static void main(String[] args) {
-		removeUserSubscribeTest();
+		getSongsTest();
 
 	}
 
@@ -157,12 +157,12 @@ public class UserListTest {
 	}
 	static void addUserTest() {
 		UserDaoImpMariaDB uDAO = new UserDaoImpMariaDB();
-		uDAO.getUserById(1);
+		uDAO.getUserById(7);
 		User u = uDAO;
 		UserListDaoImpMariaDB ulDAO = new UserListDaoImpMariaDB();
 		UserList ul;
 		try {
-			ulDAO=new UserListDaoImpMariaDB(ulDAO.getUserListById(2));
+			ulDAO=new UserListDaoImpMariaDB(ulDAO.getUserListById(4));
 			ulDAO.addUser(u);
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
