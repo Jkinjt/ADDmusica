@@ -2,13 +2,17 @@ package es.joaquin.music.launch;
 
 import java.util.List;
 
+import es.joaquin.music.model.Song;
 import es.joaquin.music.model.User;
+import es.joaquin.music.model.UserList;
 import es.joaquin.music.model.DAO.DAOException;
+import es.joaquin.music.model.MariaDB.SongDaoImpMariaDB;
 import es.joaquin.music.model.MariaDB.UserDaoImpMariaDB;
+import es.joaquin.music.model.MariaDB.UserListDaoImpMariaDB;
 
 public class UserTest {
 	public static void main(String[] args) {
-		testGetSongs();
+		testDelete();
 	}
 
 	static void testSave() {
@@ -50,7 +54,15 @@ public class UserTest {
 
 	static void testDelete() {
 		UserDaoImpMariaDB u = new UserDaoImpMariaDB();
-		u.getUserById(3);
+		u.getUserById(4);
+		u.setSongs(u.getSongs());
+		System.out.println(u.getId());
+		try {
+			u.setUserList(u.getUserList());
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		u.delete();
 	}
 
@@ -81,10 +93,55 @@ public class UserTest {
 	}
 
 	static void testRemoveList() {
+		UserListDaoImpMariaDB ulDAO = new UserListDaoImpMariaDB();
+		UserDaoImpMariaDB uDAO=new UserDaoImpMariaDB();
+		UserList ul;
+		try {
+			ul=ulDAO.getUserListById(1);
+			System.out.println(ul.getId());
+			uDAO.getUserById(1);
+			System.out.println(uDAO.getId());
+			System.out.println(uDAO.removeList(ul));
+			
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 	}
 
 	static void testAddList() {
-
+		UserListDaoImpMariaDB ulDAO = new UserListDaoImpMariaDB();
+		UserDaoImpMariaDB uDAO=new UserDaoImpMariaDB();
+		UserList ul;
+		try {
+			ul=ulDAO.getUserListById(3);
+			System.out.println(ul.getId());
+			uDAO.getUserById(5);
+			System.out.println(uDAO.getId());
+			uDAO.addList(ul);
+			
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	static void testRemoveSong() {
+		UserDaoImpMariaDB uDAO=new UserDaoImpMariaDB();
+		SongDaoImpMariaDB d=new SongDaoImpMariaDB();
+		User u=new User();
+		Song a=new Song();
+		try {
+			uDAO.getUserById(1);
+			a=d.getSongById(6);
+			System.out.println(uDAO.getId());
+			System.out.println(a.getId());
+			uDAO.removeSongSubscribe(a);
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

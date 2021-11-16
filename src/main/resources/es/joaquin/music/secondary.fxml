@@ -127,7 +127,8 @@
                      <children>
                         <AnchorPane prefHeight="86.0" prefWidth="366.0">
                            <children>
-                              <Button fx:id="disconet" layoutX="57.0" layoutY="31.0" mnemonicParsing="false" onAction="#switchToPrimary" text="Desconectarse" />
+                              <Button fx:id="disconet" layoutX="57.0" layoutY="31.0" mnemonicParsing="false" onAction="#exit" text="Desconectarse" />
+                              <Button layoutX="220.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeUser" text="Borrar Usuario" />
                            </children>
                         </AnchorPane>
                         <AnchorPane prefHeight="86.0" prefWidth="314.0">

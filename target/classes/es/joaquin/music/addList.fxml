@@ -48,8 +48,8 @@
                         </AnchorPane>
                         <AnchorPane prefHeight="86.0" prefWidth="294.0">
                            <children>
-                              <Button fx:id="saveListButton" layoutX="194.0" layoutY="31.0" mnemonicParsing="false" text="Guardar lista" />
-                              <Button layoutX="21.0" layoutY="31.0" mnemonicParsing="false" onAction="#exit" text="Atras" />
+                              <Button fx:id="removeListButton" layoutX="194.0" layoutY="31.0" mnemonicParsing="false" onAction="#removeList" text="Borrar lista" />
+                              <Button fx:id="exitButton" layoutX="21.0" layoutY="31.0" mnemonicParsing="false" onAction="#exit" text="Atras" />
                            </children>
                         </AnchorPane>
                      </children>

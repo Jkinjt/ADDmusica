@@ -5,9 +5,14 @@ import java.io.IOException;
 import es.joaquin.music.model.MariaDB.UserDaoImpMariaDB;
 import es.joaquin.music.singleton.UserSingleton;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class Registrer {
 	private UserSingleton userSingleton;
@@ -22,7 +27,7 @@ public class Registrer {
 
 	public void registrer() throws IOException {
 		if (saveUser()) {
-			App.setRoot("secondary");
+			newModal("secondary.fxml");
 		}
 	}
 
@@ -64,8 +69,28 @@ public class Registrer {
 		return result;
 	}
 
-	public void back() throws IOException {
-		App.setRoot("primary");
+	public void exit() {
+		 Stage stage = (Stage) this.cancel.getScene().getWindow();
+	        stage.close();
 
+	}
+	//metodo para cambiar la pantalla de forma ajustada
+	public void newModal(String root) {
+		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(root));
+		Parent modal;
+		try {
+			modal = fxmlLoader.load();
+			Stage modalStage = new Stage();
+			modalStage.initModality(Modality.APPLICATION_MODAL);
+			modalStage.initOwner(App.rootstage);
+			Scene modalScene = new Scene(modal);
+			modalStage.setScene(modalScene);
+			modalStage.showAndWait();
+			modalStage.setResizable(false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

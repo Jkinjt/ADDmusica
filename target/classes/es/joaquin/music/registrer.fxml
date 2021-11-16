@@ -41,7 +41,7 @@
                            </children></AnchorPane>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="77.0" prefWidth="131.0">
                            <children>
-                              <Button fx:id="cancel" layoutX="36.0" layoutY="26.0" mnemonicParsing="false" onAction="#back" text="Cancelar" />
+                              <Button fx:id="cancel" layoutX="36.0" layoutY="26.0" mnemonicParsing="false" onAction="#exit" text="Cancelar" />
                            </children></AnchorPane>
                     </items>
                   </SplitPane>

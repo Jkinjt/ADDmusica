@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
 
+import es.joaquin.music.model.DAO.DAOException;
 import es.joaquin.music.model.MariaDB.UserDaoImpMariaDB;
 import es.joaquin.music.singleton.UserSingleton;
 import javafx.fxml.FXML;
@@ -25,6 +26,8 @@ public class PrimaryController {
 	private Button conect;
 	@FXML
 	private Button registrer;
+	
+	
 
 	@FXML
 	private void getin() throws IOException, JAXBException {
@@ -55,6 +58,13 @@ public class PrimaryController {
 		if (user.getUserByEmail(email.getText())) {
 			// se setea la instancia
 			userSingleton = UserSingleton.getInstance(user);
+			UserSingleton.getUser().setSongs(UserSingleton.getUser().getSongs());
+			try {
+				UserSingleton.getUser().setUserList(UserSingleton.getUser().getUserList());
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			result = true;
 
 		}
@@ -72,7 +82,26 @@ public class PrimaryController {
 	}
 
 	public void registrerUser() throws IOException {
-		App.setRoot("registrer");
+		newModal("registrer.fxml");
 
+	}
+	
+	public void newModal(String root) {
+		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(root));
+		Parent modal;
+		try {
+			modal = fxmlLoader.load();
+			Stage modalStage = new Stage();
+			modalStage.initModality(Modality.APPLICATION_MODAL);
+			modalStage.initOwner(App.rootstage);
+			Scene modalScene = new Scene(modal);
+			modalStage.setScene(modalScene);
+			modalStage.showAndWait();
+			modalStage.setResizable(false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 	}
 }

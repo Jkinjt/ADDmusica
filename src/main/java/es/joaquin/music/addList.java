@@ -33,7 +33,6 @@ public class addList {
 	// tiene que ser estatica para que se pueda usar en el método setSongTable
 		private static DiscDaoImpMariaDB dDAO = new DiscDaoImpMariaDB();
 		private UserSingleton userSignleton;
-		private UserDaoImpMariaDB user;
 		
 
 		@FXML
@@ -68,8 +67,12 @@ public class addList {
 
 		@FXML
 		private void initialize() {
-			userSignleton = UserSingleton.getInstance();
-			user = UserSingleton.getUser();
+			try {
+				setUserList(UserSingleton.getUser().getUserList());
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
 
@@ -121,27 +124,53 @@ public class addList {
 		public void getUserList() {
 
 			UserList ul = allUserLists.getSelectionModel().getSelectedItem();
-			if (this.user.addList(ul)) {
+			if (UserSingleton.getUser().addList(ul)) {
 				try {
-					setUserList(this.user.getUserList());
+					setUserList(UserSingleton.getUser().getUserList());
 				} catch (DAOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}else {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setHeaderText(null);
+				alert.setTitle("ERROR");
+				alert.setContentText("No se ha encontrado una lista con ese nombre");
+				alert.showAndWait();
 			}
 
 		}
 
 		public void removeList() {
 
-			UserList ul = allUserLists.getSelectionModel().getSelectedItem();
-			if (this.user.removeList(ul)) {
+			UserList ul = userLists.getSelectionModel().getSelectedItem();
+			UserSingleton.getUser().removeList(ul);
 				try {
-					setUserList(this.user.getUserList());
+					setUserList(UserSingleton.getUser().getUserList());
 				} catch (DAOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			
+
+		}
+		
+		public void addList(){
+
+			UserList ul = allUserLists.getSelectionModel().getSelectedItem();
+			if (UserSingleton.getUser().addList(ul)) {
+				try {
+					setUserList(UserSingleton.getUser().getUserList());
+				} catch (DAOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else {
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setHeaderText(null);
+				alert.setTitle("ERROR");
+				alert.setContentText("Ya se ha añadido a esta lista");
+				alert.showAndWait();
 			}
 
 		}

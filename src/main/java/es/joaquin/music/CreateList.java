@@ -17,12 +17,17 @@ import es.joaquin.music.singleton.UserSingleton;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class CreateList {
 	// tiene que ser estatica para que se pueda usar en el método setSongTable
@@ -171,15 +176,10 @@ public class CreateList {
 		});
 	}
 
-	public void endList() {
+	public void endList() throws IOException {
 		// si se guarda correctamente se pasa a la otra pantalla
 		if (saveList()) {
-			try {
-				App.setRoot("secondary");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			newModal("secondary.fxml");
 		}
 	}
 
@@ -203,7 +203,7 @@ public class CreateList {
 				}
 				// se añade el usuario que se ha registrado en la lista
 				if (userListDAO.addUser(user)) {
-					user.addList(userListDAO);
+					UserSingleton.getUser().addList(userListDAO);
 					result = true;
 				}
 
@@ -236,12 +236,26 @@ public class CreateList {
 	
 	
 	public void exit() {
+		Stage stage = (Stage) this.disconet.getScene().getWindow();
+        stage.close();
+
+	}
+	public void newModal(String root) {
+		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(root));
+		Parent modal;
 		try {
-			App.setRoot("secondary");
+			modal = fxmlLoader.load();
+			Stage modalStage = new Stage();
+			modalStage.initModality(Modality.APPLICATION_MODAL);
+			modalStage.initOwner(App.rootstage);
+			Scene modalScene = new Scene(modal);
+			modalStage.setScene(modalScene);
+			modalStage.showAndWait();
+			modalStage.setResizable(false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
+		
 	}
 }

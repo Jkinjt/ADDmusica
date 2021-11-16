@@ -33,7 +33,9 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 	private static final String SELECTSONGLISTENED = "SELECT c.ID, c.nombre,c.duracion, c.reproducciones, c.ID_disco,g.nombre from cancion as c, genero AS g, escucha AS e WHERE c.ID_genero=g.ID AND c.ID=e.ID_cancion AND e.ID_usuario=?";
 	private static final String INSERTLISTSUBSCRIBE = "INSERT INTO `suscrito`(ID_lista,ID_usuario, fecha_suscripcion) VALUES (?,?,?);";
 	private static final String DELETELISTSUBSCRIBE = "DELETE FROM `suscrito` WHERE ID_lista=? AND ID_usuario=?";
-
+	private static final String INSERTSONGSUSED = "INSERT INTO escucha(ID_cancion, ID_usuario, fecha) VALUES (?,?,?)";
+	private static final String DELETESONGUSED = "DELETE FROM escucha WHERE ID_usuario=? AND ID_cancion=?";
+	
 	public UserDaoImpMariaDB() {
 		super();
 		// TODO Auto-generated constructor stub
@@ -101,6 +103,22 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
 			PreparedStatement ps = null;
+			if(this.songs.size()!=0) {
+				for (Song song : songs) {
+					try {
+						removeSongSubscribe(song);
+					} catch (DAOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			if(this.userList.size()!=0) {
+				
+				for (UserList List : this.userList) {
+					removeList(List);
+				}
+			}
 			try {
 				ps = con.prepareStatement(DELETE);
 				ps.setInt(1, this.id);
@@ -391,6 +409,8 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 						result = true;
 					}
 					
+				}else {
+					
 				}
 			} catch (DAOException e) {
 				// TODO Auto-generated catch block
@@ -442,13 +462,19 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 	}
 
 	@Override
-	public boolean removeList(UserList userList) {
+	public boolean removeList(UserList userList)  {
 		boolean result = false;
 		if (userList != null) {
-			if (removeList(userList)) {
-				if (this.userList.remove(userList)) {
-					result = true;
+			try {
+				if (removeListSubscribe(userList)) {
+					if (this.userList.remove(userList)) {
+						
+						result = true;
+					}
 				}
+			} catch (DAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 		return result;
@@ -459,10 +485,41 @@ public class UserDaoImpMariaDB extends User implements UserDAO {
 		con = MariaDBConexion.getConexion();
 		if (con != null) {
 			PreparedStatement ps = null;
+			
 			try {
 				ps = con.prepareStatement(DELETELISTSUBSCRIBE);
 				ps.setInt(1, userList.getId());
 				ps.setInt(2, this.id);
+				if (ps.executeUpdate() == 0) {
+					throw new DAOException("Fallo al ejecutar la consulta de borrado");
+				} else {
+					result = true;
+				}
+			} catch (SQLException e) {
+				throw new DAOException("Fallo al borrar en la base de datos", e);
+			} finally {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+		return result;
+	}
+	
+	public boolean removeSongSubscribe(Song song) throws DAOException {
+		boolean result = false;
+		con = MariaDBConexion.getConexion();
+		if (con != null) {
+			PreparedStatement ps = null;
+			
+			try {
+				ps = con.prepareStatement(DELETESONGUSED);
+				ps.setInt(1, this.id);
+				ps.setInt(2, song.getId());
 				if (ps.executeUpdate() == 0) {
 					throw new DAOException("Fallo al ejecutar la consulta de borrado");
 				} else {
