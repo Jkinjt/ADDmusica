@@ -155,6 +155,12 @@ public class SecondaryController {
 
 		UserListDaoImpMariaDB us = new UserListDaoImpMariaDB(this.userLists.getSelectionModel().getSelectedItem());
 		UserSingleton.setUserList(us);
+		try {
+			setSongTable(us.getSongs());
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 	public void removeUser() {
